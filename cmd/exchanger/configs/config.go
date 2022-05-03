@@ -7,7 +7,7 @@ import (
 )
 
 type config struct {
-	BaseURL string `env:"BASE_URL" envDefault:"https://api.exchangeratesapi.io/v1/"`
+	BaseURL string `env:"BASE_URL"`
 	ApiKey  string `env:"API_KEY"`
 }
 
