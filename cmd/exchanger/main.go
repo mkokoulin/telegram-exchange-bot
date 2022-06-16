@@ -6,6 +6,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/KokoulinM/telegram-exchange-bot/internal/models"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 
 	"github.com/KokoulinM/telegram-exchange-bot/internal/client"
@@ -13,6 +14,12 @@ import (
 )
 
 func main() {
+	сurrency := models.Currency{
+		From:   "",
+		To:     "",
+		Amount: "",
+	}
+
 	cfg := configs.New()
 
 	c := client.New(cfg.ExchangeURL, cfg.ExchangeToken)
@@ -36,14 +43,45 @@ func main() {
 
 		command := strings.Split(update.Message.Text, " ")
 
-		сurrencyFrom := command[0]
-		сurrencyTo := command[1]
-		amount := command[2]
+		switch command[0] {
+		case "FROM":
+			сurrency.From = command[1]
+
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "The currency FROM is set: "+command[1])
+			bot.Send(msg)
+
+			continue
+		case "TO":
+			сurrency.To = command[1]
+
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "The currency TO is set: "+command[1])
+			bot.Send(msg)
+
+			continue
+		case "CLEAR":
+			сurrency.From = ""
+			сurrency.To = ""
+
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "The FROM and TO values have been cleared")
+			bot.Send(msg)
+
+			continue
+		default:
+			if len(command) == 1 {
+				сurrency.Amount = command[0]
+			}
+
+			if len(command) > 2 {
+				сurrency.From = command[0]
+				сurrency.To = command[1]
+				сurrency.Amount = command[2]
+			}
+		}
 
 		cr := client.ConvertRequest{
-			From:   сurrencyFrom,
-			To:     сurrencyTo,
-			Amount: amount,
+			From:   сurrency.From,
+			To:     сurrency.To,
+			Amount: сurrency.Amount,
 		}
 
 		data, err := c.Convert(cr)
@@ -51,7 +89,7 @@ func main() {
 			var convertErr *client.ErrorWithConvert
 
 			if errors.As(err, &convertErr) && err.(*client.ErrorWithConvert).Title == "InvalidRequestFormat" {
-				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Invalid request format. The correct format is FROM TO AMOUNT -> GBP USD 3000")
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Invalid request format. The correct format is FROM TO AMOUNT -> GBP USD 3000. Or you need to set the values FROM and TO")
 				bot.Send(msg)
 				continue
 			}
