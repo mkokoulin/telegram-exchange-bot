@@ -7,8 +7,10 @@ import (
 )
 
 type config struct {
-	BaseURL string `env:"BASE_URL"`
-	ApiKey  string `env:"API_KEY"`
+	ExchangeURL   string `env:"EXCHANGE_URL"`
+	ExchangeToken string `env:"EXCHANGE_TOKEN"`
+	TelegramToken string `env:"TELEGRAM_TOKEN"`
+	Debug         bool   `env:"DEBUG"`
 }
 
 func New() config {

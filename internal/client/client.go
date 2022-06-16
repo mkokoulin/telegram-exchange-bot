@@ -24,6 +24,11 @@ type GetConvertResponse struct {
 	Success bool    `json:"success"`
 }
 
+type GetConvertErrorResponse struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
 type client struct {
 	host       string
 	apiKey     string
@@ -38,12 +43,38 @@ func New(host, apiKey string) *client {
 	}
 }
 
-func (c *client) Convert(from, to, amount string) (*GetConvertResponse, error) {
+type ConvertRequest struct {
+	From   string
+	To     string
+	Amount string
+}
+
+type ErrorWithConvert struct {
+	Err   error
+	Title string
+}
+
+func (err *ErrorWithConvert) Error() string {
+	return fmt.Sprintf("%v", err.Err)
+}
+
+func (err *ErrorWithConvert) Unwrap() error {
+	return err.Err
+}
+
+func NewErrorWithConvert(err error, title string) error {
+	return &ErrorWithConvert{
+		Err:   err,
+		Title: title,
+	}
+}
+
+func (c *client) Convert(convert ConvertRequest) (*GetConvertResponse, error) {
 	query := url.Values{}
 
-	query.Set("to", to)
-	query.Set("from", from)
-	query.Set("amount", amount)
+	query.Set("from", convert.From)
+	query.Set("to", convert.To)
+	query.Set("amount", convert.Amount)
 
 	endpoint := fmt.Sprintf("%s/convert?%s", c.host, query.Encode())
 
@@ -55,6 +86,9 @@ func (c *client) Convert(from, to, amount string) (*GetConvertResponse, error) {
 	request.Header.Add("apikey", c.apiKey)
 
 	response, err := c.httpClient.Do(request)
+	if err != nil {
+		return nil, err
+	}
 
 	defer response.Body.Close()
 
@@ -68,6 +102,10 @@ func (c *client) Convert(from, to, amount string) (*GetConvertResponse, error) {
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		return nil, err
+	}
+
+	if !data.Success {
+		return nil, NewErrorWithConvert(err, "InvalidRequestFormat")
 	}
 
 	return &data, nil
