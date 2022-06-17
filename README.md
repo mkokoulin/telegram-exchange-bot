@@ -9,7 +9,7 @@ docker build . --build-arg VERSION=test --tag telegram-exchange-bot
 ## Docker run
 
 ````
-docker run --env EXCHANGE_URL= --env EXCHANGE_TOKEN= --env TELEGRAM_TOKEN= telegram-exchange-bot
+docker run -d --env EXCHANGE_URL= --env EXCHANGE_TOKEN= --env TELEGRAM_TOKEN= telegram-exchange-bot
 ````
 
 #### Show images
