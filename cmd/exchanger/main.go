@@ -6,11 +6,11 @@ import (
 	"log"
 	"strings"
 
-	"github.com/KokoulinM/telegram-exchange-bot/internal/models"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 
 	"github.com/KokoulinM/telegram-exchange-bot/internal/client"
 	"github.com/KokoulinM/telegram-exchange-bot/internal/configs"
+	"github.com/KokoulinM/telegram-exchange-bot/internal/models"
 )
 
 var version string = "v0.0.0"
@@ -25,6 +25,8 @@ func main() {
 	}
 
 	cfg := configs.New()
+
+	log.Println(cfg)
 
 	c := client.New(cfg.ExchangeURL, cfg.ExchangeToken)
 
