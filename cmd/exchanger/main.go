@@ -13,7 +13,11 @@ import (
 	"github.com/KokoulinM/telegram-exchange-bot/internal/configs"
 )
 
+var version string = "v0.0.0"
+
 func main() {
+	log.Printf("The current version is %s\n", version)
+
 	сurrency := models.Currency{
 		From:   "",
 		To:     "",
