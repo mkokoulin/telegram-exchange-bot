@@ -1,1 +1,0 @@
-worker: bin/telegram-exchange-bot/cmd/exchanger
