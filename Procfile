@@ -1,1 +1,1 @@
-worker: bin/telegram-exchange-bot
+worker: telegram-exchange-bot cmd/exchanger/main.go
