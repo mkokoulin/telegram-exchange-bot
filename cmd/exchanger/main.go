@@ -4,9 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/rs/zerolog"
 
 	"github.com/KokoulinM/telegram-exchange-bot/internal/client"
 	"github.com/KokoulinM/telegram-exchange-bot/internal/configs"
@@ -16,7 +18,9 @@ import (
 var version string = "v0.0.0"
 
 func main() {
-	log.Printf("The current version is %s\n", version)
+	logger := zerolog.New(os.Stdout).Level(zerolog.DebugLevel)
+
+	logger.Log().Msgf("the current version is %s", version)
 
 	сurrency := models.Currency{
 		From:   "",
@@ -48,6 +52,8 @@ func main() {
 		}
 
 		command := strings.Split(update.Message.Text, " ")
+
+		logger.Log().Msgf("command %s", update.Message.Text)
 
 		switch command[0] {
 		case "FROM":
