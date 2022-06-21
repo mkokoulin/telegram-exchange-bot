@@ -96,6 +96,8 @@ func main() {
 			Amount: сurrency.Amount,
 		}
 
+		logger.Log().Msgf("request from: %s, to: %s, amount: %s", cr.From, cr.To, cr.Amount)
+
 		data, err := c.Convert(cr)
 		if err != nil {
 			var convertErr *client.ErrorWithConvert
