@@ -1,4 +1,7 @@
 FROM golang:1.18 as builder
+
+ADD go.mod go.sum /app/
+
 ARG VERSION=unknown
 WORKDIR /app
 COPY . .
