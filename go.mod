@@ -1,4 +1,4 @@
-module github.com/KokoulinM/telegram-exchange-bot
+module github.com/mkokoulin/telegram-exchange-bot
 
 go 1.18
 

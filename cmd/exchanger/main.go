@@ -10,9 +10,9 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/rs/zerolog"
 
-	"github.com/KokoulinM/telegram-exchange-bot/internal/client"
-	"github.com/KokoulinM/telegram-exchange-bot/internal/configs"
-	"github.com/KokoulinM/telegram-exchange-bot/internal/models"
+	"github.com/mkokoulin/telegram-exchange-bot/internal/client"
+	"github.com/mkokoulin/telegram-exchange-bot/internal/configs"
+	"github.com/mkokoulin/telegram-exchange-bot/internal/models"
 )
 
 var version string = "v0.0.0"
